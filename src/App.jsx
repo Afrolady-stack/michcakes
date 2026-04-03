@@ -298,9 +298,10 @@ export default function App() {
     return lines.join('\n')
   }, [order, customSummary, priceBreakdown])
 
-  const whatsappUrl = useMemo(() => {
-    return `https://wa.me/818033248816?text=${encodeURIComponent(orderMessage)}`
-  }, [orderMessage])
+  const whatsappUrl = useMemo(
+    () => `https://wa.me/818033248816?text=${encodeURIComponent(orderMessage)}`,
+    [orderMessage]
+  )
 
   const emailUrl = useMemo(() => {
     const subject = encodeURIComponent("Cake Order Request - Mich'cakes")
@@ -329,7 +330,6 @@ export default function App() {
       alert('Please complete all required fields before submitting your order.')
       return
     }
-
     setShowThankYou(true)
     window.location.href = whatsappUrl
   }
@@ -339,7 +339,6 @@ export default function App() {
       alert('Please complete all required fields before submitting your order.')
       return
     }
-
     setShowThankYou(true)
     window.location.href = emailUrl
   }
@@ -354,7 +353,7 @@ export default function App() {
       await navigator.clipboard.writeText(orderMessage)
       setShowThankYou(true)
       alert('Your order message has been copied. Please paste it into LINE after opening the LINE page.')
-    } catch (error) {
+    } catch {
       alert('Could not copy automatically. Please copy your order details manually from the summary.')
     }
 
