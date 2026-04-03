@@ -235,11 +235,11 @@ export default function App() {
     }
   }, [order])
 
-  const whatsappUrl = useMemo(() => {
+  const orderMessage = useMemo(() => {
     const isCake = order.productType === 'cake'
 
     const lines = [
-      'Hello Mich\'cakes, I would like to place an order.',
+      "Hello Mich'cakes, I would like to place an order.",
       '',
       `Name: ${order.customerName || '-'}`,
       `Customer WhatsApp: ${order.customerWhatsapp || '-'}`,
@@ -295,9 +295,18 @@ export default function App() {
       lines.push(`Inspiration notes: ${order.notes.trim()}`)
     }
 
-    const text = encodeURIComponent(lines.join('\n'))
-    return `https://wa.me/818033248816?text=${text}`
+    return lines.join('\n')
   }, [order, customSummary, priceBreakdown])
+
+  const whatsappUrl = useMemo(() => {
+    return `https://wa.me/818033248816?text=${encodeURIComponent(orderMessage)}`
+  }, [orderMessage])
+
+  const emailUrl = useMemo(() => {
+    const subject = encodeURIComponent("Cake Order Request - Mich'cakes")
+    const body = encodeURIComponent(orderMessage)
+    return `mailto:rupfundemichelle@gmail.com?subject=${subject}&body=${body}`
+  }, [orderMessage])
 
   const canSubmit =
     order.customerName.trim() &&
@@ -325,6 +334,33 @@ export default function App() {
     window.location.href = whatsappUrl
   }
 
+  const handleEmailOrder = () => {
+    if (!canSubmit) {
+      alert('Please complete all required fields before submitting your order.')
+      return
+    }
+
+    setShowThankYou(true)
+    window.location.href = emailUrl
+  }
+
+  const handleLineOrder = async () => {
+    if (!canSubmit) {
+      alert('Please complete all required fields before submitting your order.')
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(orderMessage)
+      setShowThankYou(true)
+      alert('Your order message has been copied. Please paste it into LINE after opening the LINE page.')
+    } catch (error) {
+      alert('Could not copy automatically. Please copy your order details manually from the summary.')
+    }
+
+    window.open('https://line.me/R/ti/p/~michelle.rupfunde', '_blank')
+  }
+
   return (
     <div className="min-h-screen scroll-smooth bg-[#fcf7f3] text-[#4e342e]">
       <style>{`
@@ -343,7 +379,7 @@ export default function App() {
           <nav className="hidden items-center gap-8 text-sm font-medium md:flex">
             <a href="#home" className="transition hover:text-[#8f3d3d]">Home</a>
             <a href="#shop" className="transition hover:text-[#8f3d3d]">Shop</a>
-            <a href="#builder" className="transition hover:text-[#8f3d3d]">Custom Cake Builder</a>
+            <a href="#builder" className="transition hover:text-[#8f3d3d]">Custom Order Builder</a>
             <a href="#gallery" className="transition hover:text-[#8f3d3d]">Gallery</a>
             <a href="#contact" className="transition hover:text-[#8f3d3d]">Contact</a>
           </nav>
@@ -840,22 +876,52 @@ export default function App() {
                 </p>
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-4">
-                <button
-                  type="button"
-                  onClick={handleWhatsappOrder}
-                  className={`rounded-full px-6 py-3 font-medium text-white shadow-sm transition ${
-                    canSubmit
-                      ? 'bg-[#9b4747] hover:opacity-90'
-                      : 'cursor-not-allowed bg-[#c7a5a5]'
-                  }`}
-                >
-                  Submit Order on WhatsApp
-                </button>
+              <div className="mt-8 space-y-4">
+                <p className="text-sm font-medium text-[#7d6259]">
+                  Choose how you want to submit your order:
+                </p>
+
+                <div className="flex flex-wrap gap-4">
+                  <button
+                    type="button"
+                    onClick={handleWhatsappOrder}
+                    className={`rounded-full px-6 py-3 font-medium text-white shadow-sm transition ${
+                      canSubmit
+                        ? 'bg-[#25D366] hover:opacity-90'
+                        : 'cursor-not-allowed bg-[#c7a5a5]'
+                    }`}
+                  >
+                    Submit on WhatsApp
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleLineOrder}
+                    className={`rounded-full px-6 py-3 font-medium text-white shadow-sm transition ${
+                      canSubmit
+                        ? 'bg-[#06C755] hover:opacity-90'
+                        : 'cursor-not-allowed bg-[#c7a5a5]'
+                    }`}
+                  >
+                    Submit on LINE
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleEmailOrder}
+                    className={`rounded-full px-6 py-3 font-medium text-white shadow-sm transition ${
+                      canSubmit
+                        ? 'bg-[#9b4747] hover:opacity-90'
+                        : 'cursor-not-allowed bg-[#c7a5a5]'
+                    }`}
+                  >
+                    Submit by Email
+                  </button>
+                </div>
 
                 <a
                   href="#home"
-                  className="rounded-full border border-[#d8c3b7] px-6 py-3 font-medium transition hover:bg-[#fcf3ee]"
+                  className="inline-block rounded-full border border-[#d8c3b7] px-6 py-3 font-medium transition hover:bg-[#fcf3ee]"
                 >
                   Back to top
                 </a>
@@ -871,7 +937,7 @@ export default function App() {
                 <div className="mt-6 rounded-2xl bg-[#fff8f4] p-5 ring-1 ring-[#f0e5de]">
                   <h4 className="text-lg font-semibold">Thank you for your order request 💕</h4>
                   <p className="mt-2 text-sm leading-6 text-[#7d6259]">
-                    Your order details were sent to WhatsApp. Once received, I’ll confirm availability and deposit details.
+                    Your order details have been prepared. For WhatsApp and email, your message opens directly. For LINE, your order message is copied so you can paste it into the chat.
                   </p>
                 </div>
               )}
@@ -1146,9 +1212,9 @@ export default function App() {
           <div>
             <h5 className="font-semibold">Contact</h5>
             <ul className="mt-4 space-y-2 text-sm text-[#7d6259]">
+              <li>LINE ID: michelle.rupfunde</li>
+              <li>Email: rupfundemichelle@gmail.com</li>
               <li>WhatsApp: 08033248816</li>
-              <li>Hadano / Yokohama area</li>
-              <li>Orders via WhatsApp</li>
             </ul>
           </div>
         </div>
