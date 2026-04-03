@@ -10,7 +10,6 @@ const CAKE_BASE_PRICES = {
   '18': { 2: 9000, 3: 10000 },
 }
 
-// IMPORTANT: replace these with your real cupcake prices
 const CUPCAKE_BASE_PRICES = {
   6: 2400,
   12: 4800,
@@ -62,6 +61,11 @@ const COLOR_THEME_STYLES = {
     dot: 'bg-pink-400',
     pill: 'bg-pink-50 text-pink-700 border-pink-200',
   },
+  white: {
+    label: 'White',
+    dot: 'bg-white border border-gray-400',
+    pill: 'bg-gray-50 text-gray-700 border-gray-300',
+  },
 }
 
 export default function App() {
@@ -100,13 +104,13 @@ export default function App() {
     },
     {
       name: 'Red Velvet Cupcakes',
-      price: 'Cupcake price list',
+      price: 'From ¥2,400',
       desc: 'Bold red cupcakes with rich piped frosting for gifts and parties.',
       image: redCupcakesBox,
     },
     {
       name: 'Vanilla Pearl Cupcakes',
-      price: 'Cupcake price list',
+      price: 'From ¥2,400',
       desc: 'Soft vanilla cupcakes decorated with pearls and delicate floral piping.',
       image: vanillaCupcakesBox,
     },
@@ -141,14 +145,9 @@ export default function App() {
     occasion: 'birthday',
     occasionOther: '',
     flavor: 'vanilla',
-
-    // cake fields
     size: '12',
     layers: 2,
-
-    // cupcake fields
     cupcakeQuantity: 6,
-
     cream: 'american',
     colorTheme: 'red',
     topping: 'none',
@@ -240,7 +239,7 @@ export default function App() {
     const isCake = order.productType === 'cake'
 
     const lines = [
-      'Hello Michelle’s Cakes, I would like to place an order.',
+      'Hello Mich\'cakes, I would like to place an order.',
       '',
       `Name: ${order.customerName || '-'}`,
       `Customer WhatsApp: ${order.customerWhatsapp || '-'}`,
@@ -317,7 +316,11 @@ export default function App() {
     COLOR_THEME_STYLES[order.colorTheme] || COLOR_THEME_STYLES.red
 
   const handleWhatsappOrder = () => {
-    if (!canSubmit) return
+    if (!canSubmit) {
+      alert('Please complete all required fields before submitting your order.')
+      return
+    }
+
     setShowThankYou(true)
     window.location.href = whatsappUrl
   }
@@ -333,7 +336,7 @@ export default function App() {
       <header className="sticky top-0 z-50 border-b border-[#eadfd8] bg-[#fcf7f3]/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Michelle’s Cakes</h1>
+            <h1 className="text-2xl font-bold tracking-tight">Mich'cakes</h1>
             <p className="text-sm text-[#8b6f65]">Elegant homemade cakes</p>
           </div>
 
@@ -637,6 +640,7 @@ export default function App() {
                     <option value="green">Green</option>
                     <option value="purple">Purple</option>
                     <option value="pink">Pink</option>
+                    <option value="white">White</option>
                   </select>
                 </div>
 
@@ -893,7 +897,7 @@ export default function App() {
                 <img
                   src={
                     order.productType === 'cupcakes'
-                      ? order.colorTheme === 'red'
+                      ? ['red', 'pink'].includes(order.colorTheme)
                         ? redCupcakesBox
                         : vanillaCupcakesBox
                       : order.colorTheme === 'pink'
@@ -906,6 +910,12 @@ export default function App() {
                   className="h-64 w-full object-cover"
                 />
               </div>
+
+              {order.productType === 'cupcakes' && (
+                <p className="mt-3 text-sm text-[#8b6f65]">
+                  Preview photo is a style reference. Final cupcake color will follow your selected theme.
+                </p>
+              )}
 
               <div className="mt-6 space-y-4 text-sm">
                 <div className="flex items-center justify-between">
@@ -1107,7 +1117,7 @@ export default function App() {
       <footer id="contact" className="border-t border-[#eadfd8] bg-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-4 lg:px-10">
           <div>
-            <h4 className="text-xl font-bold">Michelle’s Cakes</h4>
+            <h4 className="text-xl font-bold">Mich'cakes</h4>
             <p className="mt-3 text-sm leading-6 text-[#7d6259]">
               Elegant homemade cakes for birthdays, gifts, and special occasions.
             </p>
