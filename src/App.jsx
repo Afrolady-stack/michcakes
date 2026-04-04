@@ -231,17 +231,17 @@ export default function App() {
       order.topping === 'none'
         ? 'No topping'
         : order.topping === 'ferrero'
-        ? 'Ferrero Rocher'
-        : order.topping === 'lindt'
-        ? 'Lindt chocolates'
-        : 'Oreos'
+          ? 'Ferrero Rocher'
+          : order.topping === 'lindt'
+            ? 'Lindt chocolates'
+            : 'Oreos'
 
     const dripLabel =
       order.drip === 'none'
         ? 'No drip'
         : order.drip === 'milk'
-        ? 'Milk chocolate drip'
-        : 'White chocolate drip'
+          ? 'Milk chocolate drip'
+          : 'White chocolate drip'
 
     const creamLabel =
       order.cream === 'american'
@@ -296,7 +296,9 @@ export default function App() {
     lines.push(`Cream: ${customSummary.creamLabel}`)
     lines.push(`Color theme: ${customSummary.colorThemeLabel}`)
     lines.push(`Topping: ${customSummary.toppingLabel}`)
-    lines.push(`Candles: ${order.wantsCandles ? `Yes - Age ${order.candleAge || '-'}` : 'No'}`)
+    lines.push(
+      `Candles: ${order.wantsCandles ? `Yes - Age ${order.candleAge || '-'}` : 'No'}`
+    )
     lines.push(`Writing: ${order.wantsWriting ? order.message || '-' : 'No writing'}`)
     lines.push(`Pickup date: ${order.pickupDate || '-'}`)
     lines.push(`Delivery: ${DELIVERY_LABELS[order.deliveryOption]}`)
@@ -311,18 +313,18 @@ export default function App() {
 
     lines.push('')
     lines.push('Price summary:')
-    lines.push(`Base price: ¥{priceBreakdown.base.toLocaleString()}`)
-    lines.push(`Topping: ¥{priceBreakdown.topping.toLocaleString()}`)
+    lines.push(`Base price: ¥${priceBreakdown.base.toLocaleString()}`)
+    lines.push(`Topping: ¥${priceBreakdown.topping.toLocaleString()}`)
 
     if (isCake) {
-      lines.push(`Drip: ¥{priceBreakdown.drip.toLocaleString()}`)
+      lines.push(`Drip: ¥${priceBreakdown.drip.toLocaleString()}`)
     } else {
       lines.push('Drip: Not applicable')
     }
 
     lines.push('Writing: Free')
-    lines.push(`Total: ¥{priceBreakdown.total.toLocaleString()}`)
-    lines.push(`50% deposit required via JP Post Bank: ¥{priceBreakdown.deposit.toLocaleString()}`)
+    lines.push(`Total: ¥${priceBreakdown.total.toLocaleString()}`)
+    lines.push(`50% deposit required via JP Post Bank: ¥${priceBreakdown.deposit.toLocaleString()}`)
 
     if (order.notes.trim()) {
       lines.push('')
@@ -332,10 +334,9 @@ export default function App() {
     return lines.join('\n')
   }, [order, customSummary, priceBreakdown])
 
-  const whatsappUrl = useMemo(
-    () => `https://wa.me/818033248816?text=${encodeURIComponent(orderMessage)}`,
-    [orderMessage]
-  )
+  const whatsappUrl = useMemo(() => {
+    return `https://wa.me/818033248816?text=${encodeURIComponent(orderMessage)}`
+  }, [orderMessage])
 
   const emailUrl = useMemo(() => {
     const subject = encodeURIComponent("Cake Order Request - Mich'cakes")
@@ -376,6 +377,7 @@ export default function App() {
       alert('Please complete all required fields before submitting your order.')
       return
     }
+
     setShowThankYou(true)
     window.location.href = whatsappUrl
   }
@@ -385,6 +387,7 @@ export default function App() {
       alert('Please complete all required fields before submitting your order.')
       return
     }
+
     setShowThankYou(true)
     window.location.href = emailUrl
   }
