@@ -311,18 +311,18 @@ export default function App() {
 
     lines.push('')
     lines.push('Price summary:')
-    lines.push(`Base price: ¥${priceBreakdown.base.toLocaleString()}`)
-    lines.push(`Topping: ¥${priceBreakdown.topping.toLocaleString()}`)
+    lines.push(`Base price: ¥{priceBreakdown.base.toLocaleString()}`)
+    lines.push(`Topping: ¥{priceBreakdown.topping.toLocaleString()}`)
 
     if (isCake) {
-      lines.push(`Drip: ¥${priceBreakdown.drip.toLocaleString()}`)
+      lines.push(`Drip: ¥{priceBreakdown.drip.toLocaleString()}`)
     } else {
       lines.push('Drip: Not applicable')
     }
 
     lines.push('Writing: Free')
-    lines.push(`Total: ¥${priceBreakdown.total.toLocaleString()}`)
-    lines.push(`50% deposit required via JP Post Bank: ¥${priceBreakdown.deposit.toLocaleString()}`)
+    lines.push(`Total: ¥{priceBreakdown.total.toLocaleString()}`)
+    lines.push(`50% deposit required via JP Post Bank: ¥{priceBreakdown.deposit.toLocaleString()}`)
 
     if (order.notes.trim()) {
       lines.push('')
@@ -1099,7 +1099,7 @@ export default function App() {
                     <span>Drip</span>
                     <span>
                       {order.productType === 'cake'
-                        ? `¥${priceBreakdown.drip.toLocaleString()}`
+                        ? `¥{priceBreakdown.drip.toLocaleString()}`
                         : 'Not applicable'}
                     </span>
                   </div>
@@ -1111,14 +1111,14 @@ export default function App() {
 
                   <div className="mt-4 flex items-center justify-between text-lg font-semibold">
                     <span>Total</span>
-                    <span>¥${priceBreakdown.total.toLocaleString()}</span>
+                    <span>¥{priceBreakdown.total.toLocaleString()}</span>
                   </div>
                 </div>
 
                 <div className="rounded-2xl bg-[#fff8f4] p-4">
                   <p className="text-sm text-[#7d6259]">50% deposit required via JP Post Bank</p>
                   <p className="mt-1 text-2xl font-bold text-[#9b4747]">
-                    ¥${priceBreakdown.deposit.toLocaleString()}
+                    ¥{priceBreakdown.deposit.toLocaleString()}
                   </p>
                 </div>
 
