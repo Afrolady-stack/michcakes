@@ -1,9 +1,20 @@
 import { useMemo, useState } from 'react'
 import birthdayTopperCake from './assets/images/birthday-topper-cake.jpg'
-import vanillaCupcakesBox from './assets/images/vanilla-cupcakes-box.jpg'
 import birthdayRoseCake from './assets/images/birthday-rose-cake.jpg'
 import redCupcakesBox from './assets/images/red-cupcakes-box.jpg'
+import vanillaCupcakesBox from './assets/images/vanilla-cupcakes-box.jpg'
 
+// Mock design images
+import greenCake from './assets/images/green cake.jpg'
+import greenCupcakes from './assets/images/green cupcakes.jpg'
+import pinkCake from './assets/images/pink cake.jpg'
+import pinkCupcakes from './assets/images/pink cupcakes.jpg'
+import purpleCake from './assets/images/purple cake.jpg'
+import purpleCupcakes from './assets/images/purple cupcakes.jpg'
+import redCake from './assets/images/red cake.jpg'
+import whiteCreamCupcake from './assets/images/white cream cupcakes.jpg'
+import yellowCake from './assets/images/yellow cake.jpg'
+import yellowCupcakes from './assets/images/yellow cupcakes.jpg'
 const CAKE_BASE_PRICES = {
   '12': { 2: 5000, 3: 6000 },
   '15': { 2: 7000, 3: 8000 },
@@ -14,6 +25,7 @@ const CUPCAKE_BASE_PRICES = {
   6: 2400,
   12: 4800,
   18: 7200,
+
 }
 
 const TOPPING_PRICES = {
@@ -68,6 +80,15 @@ const COLOR_THEME_STYLES = {
   },
 }
 
+const cupcakePreviewMap = {
+  red: redCupcakesBox,
+  yellow: yellowCupcakes,
+  green: greenCupcakes,
+  purple: purpleCupcakes,
+  pink: pinkCupcakes,
+  white: whiteCreamCupcake,
+}
+
 export default function App() {
   const [showThankYou, setShowThankYou] = useState(false)
 
@@ -117,10 +138,14 @@ export default function App() {
   ]
 
   const gallery = [
-    birthdayTopperCake,
-    vanillaCupcakesBox,
-    birthdayRoseCake,
-    redCupcakesBox,
+    greenCake,
+    pinkCake,
+    purpleCake,
+    redCake,
+    yellowCake,
+    greenCupcakes,
+    pinkCupcakes,
+    purpleCupcakes,
   ]
 
   const testimonials = [
@@ -325,6 +350,18 @@ export default function App() {
   const selectedColorTheme =
     COLOR_THEME_STYLES[order.colorTheme] || COLOR_THEME_STYLES.red
 
+  const previewImage =
+    order.productType === 'cake'
+      ? cakePreviewMap[order.colorTheme] || birthdayTopperCake
+      : cupcakePreviewMap[order.colorTheme] || vanillaCupcakesBox
+
+  const previewNote =
+    order.productType === 'cake'
+      ? order.colorTheme === 'white'
+        ? 'White cake mock has not been added yet, so a fallback cake preview is showing.'
+        : 'This mock preview updates based on your selected cake color theme.'
+      : 'This mock preview updates based on your selected cupcake color theme.'
+
   const handleWhatsappOrder = () => {
     if (!canSubmit) {
       alert('Please complete all required fields before submitting your order.')
@@ -520,7 +557,7 @@ export default function App() {
             </p>
             <h3 className="mt-3 text-3xl font-bold">Build your order your way</h3>
             <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#7d6259]">
-              Choose between a cake and cupcakes, then customize your order details. Your total updates automatically.
+              Choose between a cake and cupcakes, then customize your order details. Your mock preview updates automatically when you choose a color.
             </p>
           </div>
 
@@ -958,29 +995,17 @@ export default function App() {
                 </span>
               </div>
 
-              <div className="mt-6 overflow-hidden rounded-[1.5rem]">
+              <div className="mt-6 overflow-hidden rounded-[1.5rem] border border-[#eee2db]">
                 <img
-                  src={
-                    order.productType === 'cupcakes'
-                      ? ['red', 'pink'].includes(order.colorTheme)
-                        ? redCupcakesBox
-                        : vanillaCupcakesBox
-                      : order.colorTheme === 'pink'
-                      ? birthdayRoseCake
-                      : order.colorTheme === 'red'
-                      ? redCupcakesBox
-                      : birthdayTopperCake
-                  }
-                  alt="Order preview"
-                  className="h-64 w-full object-cover"
+                  src={previewImage}
+                  alt={`${order.colorTheme} ${order.productType} mock preview`}
+                  className="h-72 w-full object-cover"
                 />
               </div>
 
-              {order.productType === 'cupcakes' && (
-                <p className="mt-3 text-sm text-[#8b6f65]">
-                  Preview photo is a style reference. Final cupcake color will follow your selected theme.
-                </p>
-              )}
+              <p className="mt-3 text-sm text-[#8b6f65]">
+                {previewNote}
+              </p>
 
               <div className="mt-6 space-y-4 text-sm">
                 <div className="flex items-center justify-between">
@@ -1138,7 +1163,7 @@ export default function App() {
             <p className="text-sm uppercase tracking-[0.25em] text-[#a28173]">
               Gallery preview
             </p>
-            <h3 className="mt-3 text-3xl font-bold">Cakes made with love</h3>
+            <h3 className="mt-3 text-3xl font-bold">Mock style gallery</h3>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1149,7 +1174,7 @@ export default function App() {
               >
                 <img
                   src={image}
-                  alt={`Cake gallery ${index + 1}`}
+                  alt={`Mock gallery ${index + 1}`}
                   className="h-72 w-full object-cover transition duration-300 hover:scale-105"
                 />
               </div>
