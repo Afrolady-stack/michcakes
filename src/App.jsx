@@ -15,6 +15,7 @@ import redCake from './assets/images/red cake.jpg'
 import whiteCreamCupcake from './assets/images/white cream cupcakes.jpg'
 import yellowCake from './assets/images/yellow cake.jpg'
 import yellowCupcakes from './assets/images/yellow cupcakes.jpg'
+
 const CAKE_BASE_PRICES = {
   '12': { 2: 5000, 3: 6000 },
   '15': { 2: 7000, 3: 8000 },
@@ -25,7 +26,6 @@ const CUPCAKE_BASE_PRICES = {
   6: 2400,
   12: 4800,
   18: 7200,
-
 }
 
 const TOPPING_PRICES = {
@@ -78,6 +78,15 @@ const COLOR_THEME_STYLES = {
     dot: 'bg-white border border-gray-400',
     pill: 'bg-gray-50 text-gray-700 border-gray-300',
   },
+}
+
+const cakePreviewMap = {
+  red: redCake,
+  yellow: yellowCake,
+  green: greenCake,
+  purple: purpleCake,
+  pink: pinkCake,
+  white: birthdayTopperCake,
 }
 
 const cupcakePreviewMap = {
@@ -378,23 +387,6 @@ export default function App() {
     }
     setShowThankYou(true)
     window.location.href = emailUrl
-  }
-
-  const handleLineOrder = async () => {
-    if (!canSubmit) {
-      alert('Please complete all required fields before submitting your order.')
-      return
-    }
-
-    try {
-      await navigator.clipboard.writeText(orderMessage)
-      setShowThankYou(true)
-      alert('Your order message has been copied. Please paste it into LINE after opening the LINE page.')
-    } catch {
-      alert('Could not copy automatically. Please copy your order details manually from the summary.')
-    }
-
-    window.open('https://line.me/R/ti/p/~michelle.rupfunde', '_blank')
   }
 
   return (
@@ -932,18 +924,6 @@ export default function App() {
 
                   <button
                     type="button"
-                    onClick={handleLineOrder}
-                    className={`rounded-full px-6 py-3 font-medium text-white shadow-sm transition ${
-                      canSubmit
-                        ? 'bg-[#06C755] hover:opacity-90'
-                        : 'cursor-not-allowed bg-[#c7a5a5]'
-                    }`}
-                  >
-                    Submit on LINE
-                  </button>
-
-                  <button
-                    type="button"
                     onClick={handleEmailOrder}
                     className={`rounded-full px-6 py-3 font-medium text-white shadow-sm transition ${
                       canSubmit
@@ -973,7 +953,7 @@ export default function App() {
                 <div className="mt-6 rounded-2xl bg-[#fff8f4] p-5 ring-1 ring-[#f0e5de]">
                   <h4 className="text-lg font-semibold">Thank you for your order request 💕</h4>
                   <p className="mt-2 text-sm leading-6 text-[#7d6259]">
-                    Your order details have been prepared. For WhatsApp and email, your message opens directly. For LINE, your order message is copied so you can paste it into the chat.
+                    Your order details have been prepared. WhatsApp opens a chat draft and Email opens a drafted email with your order details.
                   </p>
                 </div>
               )}
@@ -1131,14 +1111,14 @@ export default function App() {
 
                   <div className="mt-4 flex items-center justify-between text-lg font-semibold">
                     <span>Total</span>
-                    <span>¥{priceBreakdown.total.toLocaleString()}</span>
+                    <span>¥${priceBreakdown.total.toLocaleString()}</span>
                   </div>
                 </div>
 
                 <div className="rounded-2xl bg-[#fff8f4] p-4">
                   <p className="text-sm text-[#7d6259]">50% deposit required via JP Post Bank</p>
                   <p className="mt-1 text-2xl font-bold text-[#9b4747]">
-                    ¥{priceBreakdown.deposit.toLocaleString()}
+                    ¥${priceBreakdown.deposit.toLocaleString()}
                   </p>
                 </div>
 
@@ -1236,7 +1216,6 @@ export default function App() {
           <div>
             <h5 className="font-semibold">Contact</h5>
             <ul className="mt-4 space-y-2 text-sm text-[#7d6259]">
-              <li>LINE ID: michelle.rupfunde</li>
               <li>Email: rupfundemichelle@gmail.com</li>
               <li>WhatsApp: 08033248816</li>
             </ul>
