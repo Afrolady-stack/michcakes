@@ -98,8 +98,19 @@ const cupcakePreviewMap = {
   white: whiteCreamCupcake,
 }
 
+function getMinPickupDate() {
+  const today = new Date()
+  today.setDate(today.getDate() + 7)
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const day = String(today.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 export default function App() {
   const [showThankYou, setShowThankYou] = useState(false)
+
+  const minPickupDate = useMemo(() => getMinPickupDate(), [])
 
   const categories = [
     {
@@ -348,6 +359,7 @@ export default function App() {
     order.customerName.trim() &&
     order.customerWhatsapp.trim() &&
     order.pickupDate.trim() &&
+    order.pickupDate >= minPickupDate &&
     (order.occasion !== 'other' || order.occasionOther.trim()) &&
     (!order.wantsCandles || order.candleAge.trim()) &&
     (!order.wantsWriting || order.message.trim()) &&
@@ -374,7 +386,7 @@ export default function App() {
 
   const handleWhatsappOrder = () => {
     if (!canSubmit) {
-      alert('Please complete all required fields before submitting your order.')
+      alert('Please complete all required fields and choose a pickup date at least 7 days in advance before submitting your order.')
       return
     }
 
@@ -384,7 +396,7 @@ export default function App() {
 
   const handleEmailOrder = () => {
     if (!canSubmit) {
-      alert('Please complete all required fields before submitting your order.')
+      alert('Please complete all required fields and choose a pickup date at least 7 days in advance before submitting your order.')
       return
     }
 
@@ -744,10 +756,14 @@ export default function App() {
                   <label className="mb-2 block text-sm font-medium">Pickup date</label>
                   <input
                     type="date"
+                    min={minPickupDate}
                     value={order.pickupDate}
                     onChange={(e) => updateField('pickupDate', e.target.value)}
                     className="w-full rounded-xl border border-[#dfd2ca] bg-[#fffdfb] px-4 py-3 outline-none focus:border-[#9b4747]"
                   />
+                  <p className="mt-2 text-xs text-[#8b6f65]">
+                    Earliest available pickup date: {minPickupDate}
+                  </p>
                 </div>
               </div>
 
@@ -948,7 +964,7 @@ export default function App() {
 
               {!canSubmit && (
                 <p className="mt-3 text-sm text-[#9b4747]">
-                  Please add your name, WhatsApp number, pickup date, required occasion/message/candle details, and either a train station or delivery address before submitting.
+                  Please add your name, WhatsApp number, pickup date at least 7 days ahead, required occasion/message/candle details, and either a train station or delivery address before submitting.
                 </p>
               )}
 
@@ -1102,7 +1118,7 @@ export default function App() {
                     <span>Drip</span>
                     <span>
                       {order.productType === 'cake'
-                        ? `¥{priceBreakdown.drip.toLocaleString()}`
+                        ? `¥${priceBreakdown.drip.toLocaleString()}`
                         : 'Not applicable'}
                     </span>
                   </div>
